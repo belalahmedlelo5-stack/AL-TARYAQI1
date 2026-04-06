@@ -1,3 +1,5 @@
 {
-  "name": "al-taryaqi1"
+  "framework": "nextjs",
+  "buildCommand": "npm install --legacy-peer-deps && npm run build",
+  "installCommand": "npm install --legacy-peer-deps"
 }
