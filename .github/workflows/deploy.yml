@@ -1,0 +1,28 @@
+name: Deploy to Vercel
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel@latest
+
+      - name: Deploy to Vercel
+        run: vercel --prod --yes
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          NEXT_PUBLIC_SUPABASE_URL: https://kpzmwgcswpylghgorxyv.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtwem13Z2Nzd3B5bGdoZ29yeHl2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1MTYzOTAsImV4cCI6MjA5MTA5MjM5MH0.grhIyb3Htk-CV89t8VUETHAGovGcgqd-UKzvmTc7QlU
+          NEXT_PUBLIC_APP_NAME: Al-Taryaqi
+          JWT_SECRET: al-taryaqi-jwt-2024
