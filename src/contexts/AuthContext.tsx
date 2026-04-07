@@ -3,12 +3,15 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react'
 import { authApi, profilesApi } from '@/lib/supabase'
 import { Profile } from '@/types/database'
+import { UserRole, AuthUser } from '@/types'
 import { useRouter } from 'next/navigation'
 
 interface AuthContextType {
   user: Profile | null
+  authUser: AuthUser | null
   isLoading: boolean
   isAuthenticated: boolean
+  hasRole: (roles: UserRole[]) => boolean
   signIn: (email: string, password: string) => Promise<void>
   signUp: (email: string, password: string, userData: {
     name: string
@@ -31,13 +34,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const profile = await profilesApi.getCurrent()
       setUser(profile)
-    } catch (error) {
+    } catch {
       setUser(null)
     }
   }, [])
 
   useEffect(() => {
-    // Check session on mount
     const initAuth = async () => {
       try {
         const session = await authApi.getSession()
@@ -53,7 +55,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     initAuth()
 
-    // Subscribe to auth changes
     const { data: { subscription } } = authApi.onAuthStateChange(async (event, session) => {
       if (event === 'SIGNED_IN' && session) {
         await refreshUser()
@@ -62,10 +63,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     })
 
-    return () => {
-      subscription.unsubscribe()
-    }
+    return () => { subscription.unsubscribe() }
   }, [refreshUser])
+
+  const hasRole = useCallback((roles: UserRole[]): boolean => {
+    if (!user) return false
+    return roles.includes(user.role as UserRole)
+  }, [user])
+
+  const authUser: AuthUser | null = user ? {
+    id: user.id,
+    role: user.role as UserRole,
+    token: '',
+  } : null
 
   const signIn = async (email: string, password: string) => {
     setIsLoading(true)
@@ -106,8 +116,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   return (
     <AuthContext.Provider value={{
       user,
+      authUser,
       isLoading,
       isAuthenticated: !!user,
+      hasRole,
       signIn,
       signUp,
       signOut,
