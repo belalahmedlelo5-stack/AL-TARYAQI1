@@ -12,7 +12,7 @@ export interface Database {
       profiles: {
         Row: {
           id: string
-          role: 'buyer' | 'supplier' | 'admin'
+          role: 'doctor' | 'supplier' | 'admin'
           name: string
           email: string
           phone: string | null
@@ -31,15 +31,15 @@ export interface Database {
           number_of_reviews: number
           number_of_completed_orders: number
           total_order_value: number
-          buyer_rating: number
-          buyer_number_of_reviews: number
+          doctor_rating: number
+          doctor_number_of_reviews: number
           last_active_at: string
           created_at: string
           updated_at: string
         }
         Insert: {
           id?: string
-          role: 'buyer' | 'supplier' | 'admin'
+          role: 'doctor' | 'supplier' | 'admin'
           name: string
           email: string
           phone?: string | null
@@ -58,15 +58,15 @@ export interface Database {
           number_of_reviews?: number
           number_of_completed_orders?: number
           total_order_value?: number
-          buyer_rating?: number
-          buyer_number_of_reviews?: number
+          doctor_rating?: number
+          doctor_number_of_reviews?: number
           last_active_at?: string
           created_at?: string
           updated_at?: string
         }
         Update: {
           id?: string
-          role?: 'buyer' | 'supplier' | 'admin'
+          role?: 'doctor' | 'supplier' | 'admin'
           name?: string
           email?: string
           phone?: string | null
@@ -85,8 +85,8 @@ export interface Database {
           number_of_reviews?: number
           number_of_completed_orders?: number
           total_order_value?: number
-          buyer_rating?: number
-          buyer_number_of_reviews?: number
+          doctor_rating?: number
+          doctor_number_of_reviews?: number
           last_active_at?: string
           created_at?: string
           updated_at?: string
@@ -95,7 +95,7 @@ export interface Database {
       orders: {
         Row: {
           id: string
-          buyer_id: string
+          doctor_id: string
           accepted_offer_id: string | null
           accepted_supplier_id: string | null
           title: string
@@ -136,7 +136,7 @@ export interface Database {
         }
         Insert: {
           id?: string
-          buyer_id: string
+          doctor_id: string
           accepted_offer_id?: string | null
           accepted_supplier_id?: string | null
           title: string
